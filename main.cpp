@@ -1,3 +1,9 @@
+/*
+	Brian McNeese
+
+	TruthTable generator
+*/
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -5,6 +11,7 @@
 
 using namespace std;
 
+//Object for each variable, keeps its name and data
 class Variable {
 public:
 	Variable(const string& name) : name(name) {}
@@ -22,6 +29,7 @@ private:
 	vector<int> data;
 };
 
+//Obtains name of each variable and inputs 0s and 1s
 void makeVectors(vector<Variable>& variables, int numVars) {
 	int rows = 1;
 	int divider = 2;
@@ -51,59 +59,8 @@ void makeVectors(vector<Variable>& variables, int numVars) {
 	}
 }
 
-int main() {
-	int var;
-	vector<Variable> variables;
-
-	cout << "Enter number of variables and press ENTER: ";
-	cin >> var;
-
-	makeVectors(variables, var);
-	/*
-	for(size_t i = 0; i < variables.size(); ++i) {
-		cout << variables[i].getName() << " ";
-	}
-	cout << endl;
-
-	for(size_t i = 0; i < variables[0].getData().size(); ++i) {
-		for(size_t j = 0; j < variables.size(); ++j) {
-			cout << variables[j].getData()[i] << " ";
-		}
-		cout << endl;
-	}
-	*/
-	/*
-	fstream ofs("file.txt");
-
-	if(!ofs) {
-		cerr << "Could not open" << endl;
-		exit(3);
-	}
-
-	for(size_t i = 0; i < variables.size(); ++i) {
-		ofs << variables[i].getName() << ",";
-	}
-	ofs << endl;
-	
-	for(size_t i = 0; i < variables[0].getData().size(); ++i) {
-		for(size_t j = 0; j < variables.size(); ++j) {
-			ofs << variables[j].getData()[i] << ",";
-		}
-		ofs << endl;
-	}
-
-	ofs.close();
-	*/
-	string filename;
-	cout << "Please enter filename without extension: ";
-	cin >> filename;
-	ofstream excel(filename += ".csv");
-
-	if(!excel) {
-		cerr << "Could not open excel" << endl;
-		exit(3);
-	}
-
+//Writes data to Excel
+void writeToExcel(vector<Variable>& variables, ofstream& excel) {
 	for(size_t i = 0; i < variables.size(); ++i) {
 		excel << variables[i].getName() << ",";
 	}
@@ -115,7 +72,29 @@ int main() {
 		}
 		excel << endl;
 	}
+}
 
+int main() {
+	int var;
+	vector<Variable> variables;
+
+	cout << "Enter number of variables and press ENTER: ";
+	cin >> var;
+
+	makeVectors(variables, var);
+
+	string filename;
+	cout << "Please enter filename without extension: ";
+	cin >> filename;
+	ofstream excel(filename += ".csv");
+
+	if(!excel) {
+		cerr << "Could not open excel" << endl;
+		exit(3);
+	}
+
+	writeToExcel(variables, excel);
+	
 	excel.close();
 	
 }
